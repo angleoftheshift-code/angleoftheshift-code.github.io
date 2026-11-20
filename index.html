@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANGLE OF THE SHIFT // Soviet Analog & Custom DSP Lab</title>
+<style>
+  :root {
+    --bg: #050705;
+    --panel: #0a0f0a;
+    --green: #33ff33;
+    --green-dim: #198019;
+    --green-glow: rgba(51, 255, 51, 0.25);
+    --amber: #ffb000;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--green);
+    font-family: "Courier New", Courier, "Lucida Console", monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 15px;
+    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+    background-size: 100% 4px;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    border: 2px solid var(--green);
+    background-color: var(--panel);
+    box-shadow: 0 0 20px var(--green-glow);
+  }
+
+  /* Top System Bar */
+  .sys-bar {
+    background: var(--green);
+    color: var(--bg);
+    padding: 4px 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+
+  /* Header & ASCII / Oscilloscope */
+  header {
+    padding: 25px 20px;
+    border-bottom: 2px solid var(--green);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 28px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px var(--green);
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: var(--amber);
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .marquee-box {
+    border-top: 1px dashed var(--green-dim);
+    border-bottom: 1px dashed var(--green-dim);
+    padding: 6px 0;
+    margin-top: 18px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+
+  .marquee-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 22s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* Navigation */
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--green);
+    background: #070b07;
+  }
+
+  nav a {
+    color: var(--green);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-right: 1px solid var(--green-dim);
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.15s;
+  }
+
+  nav a:hover {
+    background: var(--green);
+    color: var(--bg);
+  }
+
+  /* Sections */
+  section {
+    padding: 22px 20px;
+    border-bottom: 1px dashed var(--green-dim);
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--green);
+    padding-left: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  p {
+    margin-bottom: 12px;
+  }
+
+  /* Retro Winamp / Tape Deck Player */
+  .deck-box {
+    border: 2px inset var(--green-dim);
+    background: #020402;
+    padding: 15px;
+    margin-top: 10px;
+  }
+
+  .deck-display {
+    border: 1px solid var(--green-dim);
+    padding: 10px;
+    margin-bottom: 12px;
+    background: #061206;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .led-status {
+    color: var(--amber);
+    font-weight: bold;
+  }
+
+  .deck-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .btn {
+    background: var(--bg);
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 7px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn:hover, .btn.active {
+    background: var(--green);
+    color: var(--bg);
+    box-shadow: 0 0 10px var(--green-glow);
+  }
+
+  .btn-amber {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  .btn-amber:hover {
+    background: var(--amber);
+    color: var(--bg);
+  }
+
+  /* Grid for Gear & DSP */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, mi
+
+
+nmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  .card {
+    border: 1px solid var(--green-dim);
+    padding: 14px;
+    background: #070c07;
+  }
+
+  .card h3 {
+    font-size: 16px;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+
+  ul.spec-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  ul.spec-list li {
+    margin-bottom: 6px;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  ul.spec-list li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: var(--amber);
+  }
+
+  /* Table for Rates */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  th, td {
+    border: 1px solid var(--green-dim);
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background: #0d1a0d;
+    color: var(--amber);
+  }
+
+  /* Footer */
+  footer {
+    padding: 16px 20px;
+    font-size: 12px;
+    color: var(--green-dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  max-width: 600px {
+    h1 { font-size: 21px; }
+    nav a { flex: 1 1 50%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="sys-bar">
+    <span>SYS://ANGLE_OF_THE_SHIFT.EXE</span>
+    <span>STATUS: ONLINE [BATUMI // EU_LINK]</span>
+  </div>
+
+  <header>
+    <h1>ANGLE OF THE SHIFT</h1>
+    <div class="subtitle">[ SOVIET ANALOG HARDWARE // CUSTOM DSP PLUGINS // HYBRID MIXING ]</div>
+    <div class="marquee-box">
+      <div class="marquee-text">
+        +++ WELCOME TO THE LAB +++ REAL SOVIET CONSOLES, REEL-TO-REEL TAPE & STEEL-MILL VHS COMPRESSION +++ CUSTOM C++ DSP ALGORITHMS +++ FREE 15-SEC HARDWARE RE-AMP TEST AVAILABLE +++
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#manifesto">[01] MANIFESTO</a>
+    <a href="#dsp">[02] DSP PLUGINS</a>
+    <a href="#hardware">[03] SOVIET RIG</a>
+    <a href="#lab-notes">[04] LAB NOTES</a>
+    <a href="#services">[05] SERVICES & RATES</a>
+  </nav>
+
+  <!-- MANIFESTO -->
+  <section id="manifesto">
+    <h2>01 // ENGINEERING MANIFESTO</h2>
+    <p>Modern digital audio is sterile, predictable, and overly polite. <strong>Angle of the Shift</strong> exists to inject raw Eastern Bloc circuitry, magnetic hysteresis, and phase-shifted character back into modern music production.</p>
+    <p>We operate a hybrid audio laboratory combining rare Soviet-era consoles, reel-to-reel tape machines, and custom-coded DSP plugins modeled directly from physical component measurements.</p>
+  </section>
+
+  <!-- AUDIO DEMO DECK -->
+  <section id="audio-deck">
+    <h2>02 // A/B HARDWARE & DSP MONITOR</h2>
+    <p>Test the difference between sterile digital stems and our Soviet analog / DSP chain (Audio samples loading soon — direct requests open):</p>
+    <div class="deck-box">
+      <div class="deck-display">
+        <span id="track-title">TRACK: 01_DRUM_BUS_ROADSTAR_VCR.WAV</span>
+        <span class="led-status" id="mode-status">[MODE: BYPASS / DRY]</span>
+      </div>
+      <div class="deck-controls">
+        <button class="btn active" id="btn-dry" onclick="setMode('DRY')">[ DRY SIGNAL ]</button>
+        <button class="btn btn-amber" id="btn-wet" onclick="setMode('WET')">[ SOVIET ANALOG / DSP ]</button>
+        <button class="btn" onclick="nextTrack()">[ NEXT STEM » ]</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CUSTOM DSP PLUGINS -->
+  <section id="dsp">
+    <h2>03 // CUSTOM DSP ARCHIVE (VST3 / AU)</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>TROPIL-LO // Tape & Console Preamp</h3>
+        <p>Inspired by legendary Leningrad underground studio tape saturation, asymmetrical germanium clipping, and transformer weight.</p>
+        <a href="#services" class="btn">[ REQUEST DEMO ]</a>
+      </div>
+      <div class="card">
+        <h3>KARAT // Radio & Telemetry Filter</h3>
+        <p>Modeled after Soviet shortwave radio transceivers. Brutal bandpass coloration, AGC pumping, and authentic carrier grit.</p>
+        <a href="#services" class="btn"
+
+
+>[ REQUEST DEMO ]</a>
+      </div>
+      <div class="card">
+        <h3>RIGONDA // Tube Radio Harmonics</h3>
+        <p>Warm, thick even-order harmonic generator derived from classic 1960s Riga-built vacuum tube radio receivers.</p>
+        <a href="#services" class="btn">[ REQUEST DEMO ]</a>
+      </div>
+      <div class="card">
+        <h3>ROMANTIKA / LOMO // Lo-Fi Drive</h3>
+        <p>Portable Soviet reel-to-reel motor flutter combined with cinema-grade LOMO optical/magnetic preamplifier curve.</p>
+        <a href="#services" class="btn">[ REQUEST DEMO ]</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HARDWARE RIG -->
+  <section id="hardware">
+    <h2>04 // PHYSICAL HARDWARE ARSENAL</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>CONSOLES & OUTBOARD</h3>
+        <ul class="spec-list">
+          <li><strong>Elektronika PM-03 & PM-01</strong> — Vintage Soviet mixing consoles (rich transformer & op-amp grit)</li>
+          <li><strong>Helios / Sirius-5 / Formanta</strong> — Rare Eastern Bloc preamps & EQ stages</li>
+          <li><strong>Roadstar VCP-615K (NLMK)</strong> — 1990s steel-mill assembled Hi-Fi VHS deck used as an analog FM/AGC mastering compressor</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>TAPE, DRUMS & MICS</h3>
+        <ul class="spec-list">
+          <li><strong>Kometa & Mayak</strong> — Soviet reel-to-reel tape decks for real magnetic saturation</li>
+          <li><strong>Epoimi Drums + Custom DDS Snare</strong> — Vintage percussion & custom octobans</li>
+          <li><strong>Oktava Microphones & Jolana/Russtone Basses</strong> — Authentic Eastern European tracking chain</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED ARTICLE -->
+  <section id="lab-notes">
+    <h2>05 // LAB NOTES & RESEARCH</h2>
+    <div class="card">
+      <h3>[FEATURED] THE STEEL MILL SECRET: Using a 1990s Soviet Roadstar VCR as an Analog Mastering Compressor</h3>
