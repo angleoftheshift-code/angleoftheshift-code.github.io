@@ -1,17 +1,28 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANGLE OF THE SHIFT // Soviet Analog & Custom DSP Lab</title>
+<title>ANGLE OF THE SHIFT // Analog Hardware & Custom DSP Lab</title>
 <style>
+  /* =====================================================================
+     QUICK CONFIG: Find "TODO" in <script> at the bottom to paste your
+     PayPal link and MP3 demo filename!
+     ===================================================================== */
+
   :root {
-    --bg: #050705;
-    --panel: #0a0f0a;
-    --green: #33ff33;
-    --green-dim: #198019;
-    --green-glow: rgba(51, 255, 51, 0.25);
-    --amber: #ffb000;
+    --chassis-dark: #1d1f21;
+    --chassis-mid: #2a2d30;
+    --alu-light: #d6d9dc;
+    --alu-mid: #b4b9be;
+    --alu-dark: #888e94;
+    --screen-bg: #07120e;
+    --vfd-cyan: #2cf5c6;
+    --vfd-amber: #ffaa1d;
+    --led-red: #ff2a2a;
+    --led-green: #24ff4b;
+    --ink-dark: #141618;
   }
 
   * {
@@ -21,362 +32,805 @@
   }
 
   body {
-    background-color: var(--bg);
-    color: var(--green);
+    background-color: #121315;
+    background-image: 
+      radial-gradient(circle at 50% 0%, #25282c 0%, #101113 80%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+    color: #e2e5e8;
     font-family: "Courier New", Courier, "Lucida Console", monospace;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.5;
-    padding: 15px;
-    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
-    background-size: 100% 4px;
+    padding: 18px 10px 40px;
   }
 
-  .container {
-    max-width: 920px;
+  /* MAIN RACKMOUNT CHASSIS */
+  .rack-unit {
+    max-width: 960px;
     margin: 0 auto;
-    border: 2px solid var(--green);
-    background-color: var(--panel);
-    box-shadow: 0 0 20px var(--green-glow);
+    background: var(--chassis-dark);
+    border: 3px solid #090a0b;
+    border-radius: 6px;
+    box-shadow: 
+      0 20px 50px rgba(0,0,0,0.85),
+      inset 0 1px 0 rgba(255,255,255,0.15);
+    overflow: hidden;
   }
 
-  /* Top System Bar */
-  .sys-bar {
-    background: var(--green);
-    color: var(--bg);
-    padding: 4px 10px;
-    font-weight: bold;
+  /* BRUSHED ALUMINUM TOP FACEPLATE */
+  .faceplate-alu {
+    background: linear-gradient(180deg, #dfe2e5 0%, #c4c9ce 48%, #aeb4ba 52%, #c9ced3 100%);
+    color: var(--ink-dark);
+    padding: 18px 24px 20px;
+    border-bottom: 4px solid #0b0c0d;
+    position: relative;
+    box-shadow: inset 0 2px 3px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,0,0,0.35);
+  }
+
+  /* RACK SCREWS */
+  .screw {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f0f2f4, #6c7278);
+    border: 1px solid #2b2e31;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.7);
+    position: absolute;
+  }
+  .screw::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 2px;
+    width: 8px;
+    height: 1.5px;
+    background: #2b2e31;
+    transform: rotate(-35deg);
+  }
+  .screw.tl { top: 10px; left: 10px; }
+  .screw.tr { top: 10px; right: 10px; }
+  .screw.bl { bottom: 10px; left: 10px; }
+  .screw.br { bottom: 10px; right: 10px; }
+
+  .top-badges {
     display: flex;
     justify-content: space-between;
-    font-size: 13px;
-    text-transform: uppercase;
-  }
-
-  /* Header & ASCII / Oscilloscope */
-  header {
-    padding: 25px 20px;
-    border-bottom: 2px solid var(--green);
-    text-align: center;
-  }
-
-  h1 {
-    font-size: 28px;
-    letter-spacing: 3px;
-    text-shadow: 0 0 8px var(--green);
-    margin-bottom: 8px;
-  }
-
-  .subtitle {
-    color: var(--amber);
-    font-size: 14px;
+    align-items: center;
+    font-size: 11px;
+    font-weight: bold;
     letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding: 0 12px;
+    color: #2c3035;
   }
 
-  .marquee-box {
-    border-top: 1px dashed var(--green-dim);
-    border-bottom: 1px dashed var(--green-dim);
-    padding: 6px 0;
-    margin-top: 18px;
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 13px;
+  .gost-stamp {
+    border: 1.5px solid #2c3035;
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.5px;
   }
 
-  .marquee-text {
-    display: inline-block;
-    padding-left: 100%;
-    animation: scroll-left 22s linear infinite;
+  .brand-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 0 12px;
   }
 
-  @keyframes scroll-left {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
+  .brand-title h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #111315;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    line-height: 1.1;
   }
 
-  /* Navigation */
-  nav {
+  .brand-sub {
+    font-size: 12px;
+    font-weight: bold;
+    color: #353a40;
+    letter-spacing: 1.2px;
+    margin-top: 4px;
+  }
+
+  /* POWER SWITCH & PILOT LED */
+  .power-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0,0,0,0.08);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.2);
+  }
+
+  .led-indicator {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #3a1111;
+    border: 1px solid #111;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+    transition: 0.2s;
+  }
+
+  .led-indicator.on-red {
+    background: var(--led-red);
+    box-shadow: 0 0 8px var(--led-red), 0 0 16px rgba(255,42,42,0.6), inset 0 1px 2px #fff;
+  }
+
+  .led-indicator.on-green {
+    background: var(--led-green);
+    box-shadow: 0 0 8px var(--led-green), 0 0 14px rgba(36,255,75,0.6), inset 0 1px 2px #fff;
+  }
+
+  .led-indicator.on-amber {
+    background: var(--vfd-amber);
+    box-shadow: 0 0 8px var(--vfd-amber), inset 0 1px 2px #fff;
+  }
+
+  /* TACTILE HARDWARE PUSH BUTTONS */
+  .hw-btn {
+    background: linear-gradient(180deg, #f2f4f6 0%, #cfd4d9 85%, #9aa0a6 100%);
+    color: #141618;
+    border: 1.5px solid #1e2022;
+    border-radius: 3px;
+    padding: 7px 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 
+      0 3px 0 #464b50,
+      0 4px 6px rgba(0,0,0,0.45),
+      inset 0 1px 0 #ffffff;
+    transition: transform 0.06s, box-shadow 0.06s;
+    user-select: none;
+  }
+
+  .hw-btn:active, .hw-btn.pressed {
+    transform: translateY(2px);
+    box-shadow: 
+      0 1px 0 #464b50,
+      0 2px 3px rgba(0,0,0,0.4),
+      inset 0 2px 4px rgba(0,0,0,0.25);
+    background: linear-gradient(180deg, #c5cacf 0%, #dce0e4 100%);
+  }
+
+  .hw-btn-dark {
+    background: linear-gradient(180deg, #3e4247 0%, #272a2e 85%, #191b1d 100%);
+    color: #eef1f4;
+    border: 1.5px solid #0b0c0d;
+    box-shadow: 
+      0 3px 0 #0e0f10,
+      0 4px 6px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  .hw-btn-dark:active, .hw-btn-dark.pressed {
+    background: linear-gradient(180deg, #222528 0%, #31353a 100%);
+    box-shadow: 0 1px 0 #0e0f10, inset 0 2px 5px rgba(0,0,0,0.6);
+  }
+
+  .hw-btn-amber {
+    background: linear-gradient(180deg, #ffc44d 0%, #e69500 85%, #b37400 100%);
+    color: #111;
+    border: 1.5px solid #3d2600;
+    box-shadow: 
+      0 3px 0 #664200,
+      0 4px 8px rgba(0,0,0,0.5),
+      inset 0 1px 0 #ffe6b3;
+  }
+
+  /* NAVIGATION BAR (SELECTOR SWITCHES) */
+  .selector-bar {
+    background: #17191b;
+    padding: 10px 20px;
+    border-bottom: 2px solid #090a0b;
     display: flex;
     flex-wrap: wrap;
-    border-bottom: 2px solid var(--green);
-    background: #070b07;
+    gap: 8px;
+    justify-content: center;
   }
 
-  nav a {
-    color: var(--green);
-    text-decoration: none;
-    padding: 10px 16px;
-    border-right: 1px solid var(--green-dim);
-    font-weight: bold;
-    font-size: 14px;
-    transition: 0.15s;
+  /* SECTIONS */
+  .module-section {
+    padding: 22px 24px;
+    border-bottom: 3px solid #101113;
+    background: linear-gradient(180deg, #212427 0%, #1b1d20 100%);
+    position: relative;
   }
 
-  nav a:hover {
-    background: var(--green);
-    color: var(--bg);
+  .module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px solid #383c42;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
   }
 
-  /* Sections */
-  section {
-    padding: 22px 20px;
-    border-bottom: 1px dashed var(--green-dim);
-  }
-
-  h2 {
-    font-size: 18px;
-    margin-bottom: 14px;
-    border-left: 4px solid var(--green);
-    padding-left: 10px;
+  .module-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: #f0f3f6;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  p {
-    margin-bottom: 12px;
+  .module-code {
+    background: #101214;
+    color: var(--vfd-amber);
+    border: 1px solid #3c4046;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-family: "Courier New", monospace;
   }
 
-  /* Retro Winamp / Tape Deck Player */
-  .deck-box {
-    border: 2px inset var(--green-dim);
-    background: #020402;
-    padding: 15px;
-    margin-top: 10px;
+  /* VFD TAPE DECK & A/B AUDIO MONITOR */
+  .vfd-bezel {
+    background: #0a0c0d;
+    border: 3px solid #35393e;
+    border-radius: 5px;
+    padding: 14px;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.95), 0 1px 0 rgba(255,255,255,0.1);
   }
 
-  .deck-display {
-    border: 1px solid var(--green-dim);
-    padding: 10px;
-    margin-bottom: 12px;
-    background: #061206;
+  .vfd-screen {
+    background-color: var(--screen-bg);
+    background-image: 
+      linear-gradient(rgba(44, 245, 198, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(44, 245, 198, 0.04) 1px, transparent 1px);
+    background-size: 4px 4px;
+    border: 1px solid #16382e;
+    border-radius: 3px;
+    padding: 14px;
+    color: var(--vfd-cyan);
+    text-shadow: 0 0 6px rgba(44, 245, 198, 0.55);
+    margin-bottom: 14px;
+  }
+
+  .vfd-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(44, 245, 198, 0.25);
+    padding-bottom: 8px;
   }
 
-  .led-status {
-    color: var(--amber);
+  .vfd-mode-badge {
+    color: var(--vfd-amber);
+    text-shadow: 0 0 6px rgba(255, 170, 29, 0.6);
     font-weight: bold;
   }
 
-  .deck-controls {
+  /* SEGMENTED VU METER */
+  .vu-container {
+    display: grid;
+    grid-template-columns: 28px 1fr 48px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 11px;
+  }
+
+  .vu-bar {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    gap: 2px;
+    height: 12px;
+    background: #030806;
+    padding: 2px;
+    border: 1px solid #14332a;
+  }
+
+  .vu-seg {
+    background: #0d261f;
+    border-radius: 1px;
+    transition: background 0.05s;
+  }
+
+  .vu-seg.active-cyan {
+    background: var(--vfd-cyan);
+    box-shadow: 0 0 5px var(--vfd-cyan);
+  }
+
+  .vu-seg.active-amber {
+    background: var(--vfd-amber);
+    box-shadow: 0 0 5px var(--vfd-amber);
+  }
+
+  .vu-seg.active-red {
+    background: var(--led-red);
+    box-shadow: 0 0 6px var(--led-red);
+  }
+
+  .deck-transport {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .transport-group {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
 
-  .btn {
-    background: var(--bg);
-    color: var(--green);
-    border: 1px solid var(--green);
-    padding: 7px 14px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
+  /* SIGNAL FLOW SVG SCHEMATIC */
+  .schematic-box {
+    background: #121518;
+    border: 1.5px solid #353a40;
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 14px;
+    overflow-x: auto;
+  }
+
+  .schematic-caption {
+    font-size: 11px;
+    color: #9aa1a8;
     text-transform: uppercase;
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .btn:hover, .btn.active {
-    background: var(--green);
-    color: var(--bg);
-    box-shadow: 0 0 10px var(--green-glow);
-  }
-
-  .btn-amber {
-    border-color: var(--amber);
-    color: var(--amber);
-  }
-
-  .btn-amber:hover {
-    background: var(--amber);
-    color: var(--bg);
-  }
-
-  /* Grid for Gear & DSP */
-  .grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, mi
-
-
-nmax(280px, 1fr));
-    gap: 15px;
-    margin-top: 10px;
-  }
-
-  .card {
-    border: 1px solid var(--green-dim);
-    padding: 14px;
-    background: #070c07;
-  }
-
-  .card h3 {
-    font-size: 16px;
-    color: var(--amber);
+    letter-spacing: 1px;
     margin-bottom: 8px;
   }
 
-  ul.spec-list {
-    list-style: none;
-    padding-left: 0;
+  /* FEATURED SAMPLE PACK CARD (EPOIMI) */
+  .release-box {
+    background: linear-gradient(135deg, #292d32 0%, #1c1e21 100%);
+    border: 2px solid #c99228;
+    border-radius: 5px;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
   }
 
-  ul.spec-list li {
-    margin-bottom: 6px;
-    padding-left: 14px;
-    position: relative;
-  }
+Используйте код с осторожностью.
+.cassette-art {
+background: #141517;
+border: 2px solid #454a50;
+border-radius: 6px;
+padding: 10px;
+text-align: center;
+box-shadow: inset 0 0 10px #000;
+}
+.release-info h3 {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 20px;
+color: #fff;
+margin-bottom: 6px;
+}
+.release-tag {
+display: inline-block;
+background: var(--vfd-amber);
+color: #111;
+font-weight: bold;
+font-size: 11px;
+padding: 2px 7px;
+border-radius: 2px;
+margin-bottom: 8px;
+}
+.buy-bar {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+gap: 14px;
+margin-top: 14px;
+padding-top: 12px;
+border-top: 1px dashed #454a50;
+}
+.price-tag {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 22px;
+font-weight: 900;
+color: var(--vfd-cyan);
+text-shadow: 0 0 8px rgba(44,245,198,0.35);
+}
+/* HARDWARE & DSP RACK MODULES GRID */
+.grid-2 {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+gap: 14px;
+}
+.rack-card {
+background: #17191c;
+border: 1.5px solid #35393f;
+border-radius: 4px;
+padding: 14px;
+box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.rack-card-head {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 8px;
+border-bottom: 1px solid #2b2f34;
+padding-bottom: 6px;
+}
+.rack-card h3 {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 14px;
+font-weight: 800;
+color: var(--vfd-amber);
+letter-spacing: 0.5px;
+}
+.spec-list {
+list-style: none;
+}
+.spec-list li {
+position: relative;
+padding-left: 14px;
+margin-bottom: 6px;
+font-size: 13px;
+color: #cfd4da;
+}
+.spec-list li::before {
+content: "▪";
+position: absolute;
+left: 0;
+color: var(--vfd-cyan);
+}
+/* SERVICES TABLE */
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: 13px;
+background: #15171a;
+}
+th, td {
+border: 1px solid #34383e;
+padding: 10px 12px;
+text-align: left;
+}
+th {
+background: #25292e;
+color: var(--vfd-amber);
+font-family: Arial, Helvetica, sans-serif;
+text-transform: uppercase;
+font-size: 12px;
+}
+/* FOOTER */
+footer {
+background: #111214;
+padding: 16px 24px;
+display: flex;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 10px;
+font-size: 12px;
+color: #888f96;
+}
+@media (max-width: 680px) {
+.release-box {
+grid-template-columns: 1fr;
+}
+.cassette-art {
+max-width: 240px;
+margin: 0 auto;
+}
+.brand-title h1 {
+font-size: 22px;
+}
+}
 
-  ul.spec-list li::before {
-    content: ">";
-    position: absolute;
-    left: 0;
-    color: var(--amber);
-  }
 
-  /* Table for Rates */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    font-size: 14px;
-  }
-
-  th, td {
-    border: 1px solid var(--green-dim);
-    padding: 10px;
-    text-align: left;
-  }
-
-  th {
-    background: #0d1a0d;
-    color: var(--amber);
-  }
-
-  /* Footer */
-  footer {
-    padding: 16px 20px;
-    font-size: 12px;
-    color: var(--green-dim);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  max-width: 600px {
-    h1 { font-size: 21px; }
-    nav a { flex: 1 1 50%; text-align: center; }
-  }
-</style>
-</head>
-<body>
-
-<div class="container">
-  <div class="sys-bar">
-    <span>SYS://ANGLE_OF_THE_SHIFT.EXE</span>
-    <span>STATUS: ONLINE [BATUMI // EU_LINK]</span>
-  </div>
-
-  <header>
-    <h1>ANGLE OF THE SHIFT</h1>
-    <div class="subtitle">[ SOVIET ANALOG HARDWARE // CUSTOM DSP PLUGINS // HYBRID MIXING ]</div>
-    <div class="marquee-box">
-      <div class="marquee-text">
-        +++ WELCOME TO THE LAB +++ REAL SOVIET CONSOLES, REEL-TO-REEL TAPE & STEEL-MILL VHS COMPRESSION +++ CUSTOM C++ DSP ALGORITHMS +++ FREE 15-SEC HARDWARE RE-AMP TEST AVAILABLE +++
-      </div>
-    </div>
-  </header>
-
-  <nav>
-    <a href="#manifesto">[01] MANIFESTO</a>
-    <a href="#dsp">[02] DSP PLUGINS</a>
-    <a href="#hardware">[03] SOVIET RIG</a>
-    <a href="#lab-notes">[04] LAB NOTES</a>
-    <a href="#services">[05] SERVICES & RATES</a>
-  </nav>
-
-  <!-- MANIFESTO -->
-  <section id="manifesto">
-    <h2>01 // ENGINEERING MANIFESTO</h2>
-    <p>Modern digital audio is sterile, predictable, and overly polite. <strong>Angle of the Shift</strong> exists to inject raw Eastern Bloc circuitry, magnetic hysteresis, and phase-shifted character back into modern music production.</p>
-    <p>We operate a hybrid audio laboratory combining rare Soviet-era consoles, reel-to-reel tape machines, and custom-coded DSP plugins modeled directly from physical component measurements.</p>
-  </section>
-
-  <!-- AUDIO DEMO DECK -->
-  <section id="audio-deck">
-    <h2>02 // A/B HARDWARE & DSP MONITOR</h2>
-    <p>Test the difference between sterile digital stems and our Soviet analog / DSP chain (Audio samples loading soon — direct requests open):</p>
-    <div class="deck-box">
-      <div class="deck-display">
-        <span id="track-title">TRACK: 01_DRUM_BUS_ROADSTAR_VCR.WAV</span>
-        <span class="led-status" id="mode-status">[MODE: BYPASS / DRY]</span>
-      </div>
-      <div class="deck-controls">
-        <button class="btn active" id="btn-dry" onclick="setMode('DRY')">[ DRY SIGNAL ]</button>
-        <button class="btn btn-amber" id="btn-wet" onclick="setMode('WET')">[ SOVIET ANALOG / DSP ]</button>
-        <button class="btn" onclick="nextTrack()">[ NEXT STEM » ]</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- CUSTOM DSP PLUGINS -->
-  <section id="dsp">
-    <h2>03 // CUSTOM DSP ARCHIVE (VST3 / AU)</h2>
-    <div class="grid-2">
-      <div class="card">
-        <h3>TROPIL-LO // Tape & Console Preamp</h3>
-        <p>Inspired by legendary Leningrad underground studio tape saturation, asymmetrical germanium clipping, and transformer weight.</p>
-        <a href="#services" class="btn">[ REQUEST DEMO ]</a>
-      </div>
-      <div class="card">
-        <h3>KARAT // Radio & Telemetry Filter</h3>
-        <p>Modeled after Soviet shortwave radio transceivers. Brutal bandpass coloration, AGC pumping, and authentic carrier grit.</p>
-        <a href="#services" class="btn"
+UNIT: AOTS-615 // STEREO ANALOG & DSP PROCESSOR
+CUSTOM LAB // 24-BIT
+ANGLE OF THE SHIFT
+VINTAGE ANALOG HARDWARE // CUSTOM C++ DSP // SAMPLE ARCHIVE
+220V / 50Hz
+LAB ONLINE
 
 
->[ REQUEST DEMO ]</a>
-      </div>
-      <div class="card">
-        <h3>RIGONDA // Tube Radio Harmonics</h3>
-        <p>Warm, thick even-order harmonic generator derived from classic 1960s Riga-built vacuum tube radio receivers.</p>
-        <a href="#services" class="btn">[ REQUEST DEMO ]</a>
-      </div>
-      <div class="card">
-        <h3>ROMANTIKA / LOMO // Lo-Fi Drive</h3>
-        <p>Portable Soviet reel-to-reel motor flutter combined with cinema-grade LOMO optical/magnetic preamplifier curve.</p>
-        <a href="#services" class="btn">[ REQUEST DEMO ]</a>
-      </div>
-    </div>
-  </section>
+ 01. EPOIMI PACK ($7)
+ 02. A/B MONITOR
+ 03. ANALOG RIG
+ 04. DSP ENGINE
+05. RE-AMP & MIX
+01 // FIRST RELEASE: EPOIMI DRUM KIT
 
-  <!-- HARDWARE RIG -->
-  <section id="hardware">
-    <h2>04 // PHYSICAL HARDWARE ARSENAL</h2>
-    <div class="grid-2">
-      <div class="card">
-        <h3>CONSOLES & OUTBOARD</h3>
-        <ul class="spec-list">
-          <li><strong>Elektronika PM-03 & PM-01</strong> — Vintage Soviet mixing consoles (rich transformer & op-amp grit)</li>
-          <li><strong>Helios / Sirius-5 / Formanta</strong> — Rare Eastern Bloc preamps & EQ stages</li>
-          <li><strong>Roadstar VCP-615K (NLMK)</strong> — 1990s steel-mill assembled Hi-Fi VHS deck used as an analog FM/AGC mastering compressor</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>TAPE, DRUMS & MICS</h3>
-        <ul class="spec-list">
-          <li><strong>Kometa & Mayak</strong> — Soviet reel-to-reel tape decks for real magnetic saturation</li>
-          <li><strong>Epoimi Drums + Custom DDS Snare</strong> — Vintage percussion & custom octobans</li>
-          <li><strong>Oktava Microphones & Jolana/Russtone Basses</strong> — Authentic Eastern European tracking chain</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+CAT. NO: AOTS-001 // 24-BIT WAV
+ANALOG TAPE / VHS LIMITING
+NEW RELEASE // INSTANT DOWNLOAD
+EPOIMI — Raw Vintage Drum One-Shots (13 WAVs)
 
-  <!-- FEATURED ARTICLE -->
-  <section id="lab-notes">
-    <h2>05 // LAB NOTES & RESEARCH</h2>
-    <div class="card">
-      <h3>[FEATURED] THE STEEL MILL SECRET: Using a 1990s Soviet Roadstar VCR as an Analog Mastering Compressor</h3>
+Rare vintage "Epoimi" acoustic drum kit fitted with both dead-stock vintage drumheads and modern skins. Tracked with vintage dynamic microphones through a discrete analog mixing console and driven hot into a Perestroika-era VHS deck used as a physical magnetic limiter.
+
+
+Includes: 13 unhyped, punchy 24-bit/48kHz WAV one-shots (Kicks, Snares, Toms, Percussion) + detailed hardware signal-chain notes (README_EPOIMI_PACK.txt). 100% Royalty-Free.
+$7+ (Name Your Price)
+
+ BUY VIA PAYPAL ($7+)
+
+
+
+02 // A/B ANALOG SIGNAL & TAPE LIMITER MONITOR
+
+UNIT: VFD-233 // DISPLAY
+TAPE: 01_EPOIMI_DRUM_LOOP_ANALOG.WAV
+[PATH: DISCRETE CONSOLE + VHS LIMITER]
+L-CH
+
++3 dB
+
+
+R-CH
+
+PEAK
+
+ ▶ PLAY DEMO
+
+
+■ STOP
+
+ BYPASS (DRY)
+
+
+ ANALOG CHAIN (WET)
+
+
+
+FIG 1.0 — PHYSICAL RECORDING & LIMITING SIGNAL PATH (ZERO DIGITAL LIMITERS)
+
+
+
+
+
+
+
+
+03 // ANALOG OUTBOARD & INSTRUMENT LAB
+
+STATUS: CALIBRATED
+CONSOLES, TAPE & VHS LIMITING
+OUTBOARD
+
+
+Perestroika-Era VHS Limiter: Rare steel-plant barter-era video deck driven into nonlinear magnetic saturation as a physical drum-bus limiter.
+Discrete Vintage Consoles: Early transistor and germanium mixing desks with gritty summing buses and transformer coloration.
+Reel-to-Reel & Cassette Decks: Multi-speed magnetic tape machines loaded with dead-stock (NOS) ferric and chrome tape formulations.
+Tube Radio & Analog Synths: Vacuum-tube output stages, vintage parametric EQs, and discrete analog drum/string synthesizers.
+
+DRUMS, BASSES & MICROPHONES
+ACOUSTIC
+
+
+Epoimi Vintage Drum Kit: Recorded with both original NOS vintage heads and modern drumheads for raw, unpolished transient punch.
+Custom 1-of-1 Percussion: Hand-built custom snare drum and DIY resonant octobans (coming in future volumes).
+Vintage Electric Basses: Strung with dead-stock vintage strings for thick, woody, mid-focused low-end thump.
+Vintage Dynamic Microphones & Lo-Fi Re-Amping: Period dynamic mics, portable tape players, and CRT television speaker cabinets.
+
+
+04 // CUSTOM C++ DSP ARCHITECTURE (VST3 / AU)
+
+ENGINE: IN DEVELOPMENT
+MAGNETIC HYSTERESIS & TAPE
+DSP-01
+
+Component-level C++ models of asymmetrical tape saturation, bias drift, head bump, and transformer weight measured directly from our studio decks.
+TELEMETRY & TUBE HARMONICS
+DSP-02
+
+Nonlinear waveshaping, shortwave bandpass coloration, AGC pumping, and even-order vacuum-tube output stages.
+
+05 // REMOTE HARDWARE RE-AMPING & HYBRID MIXING
+
+EU / GLOBAL REMOTE
+Modern digital audio is sterile and overly polite. Angle of the Shift injects real Eastern Bloc circuitry, magnetic hysteresis, and physical VHS compression directly into your stems.
+
+SERVICE MODULE	HARDWARE / DSP PATH	TURNAROUND / RATE
+15-Sec Free Hardware Test
+	Send 1 dry drum loop or synth stem — we run it through our discrete console + VHS limiter	FREE TEST (48h)
+Analog Stem / Bus Printing
+	Up to 8 stems printed through vintage consoles, NOS magnetic tape & physical VCR limiter	€35 / track
+Custom Sample Pack / DSP Licensing
+	Bespoke drum/synth one-shots or custom C++ DSP algorithms for labels & developers	On Request
+
+ SEND STEMS / CONTACT LAB
+
+Direct Email: angleoftheshift@gmail.com
+ANGLE OF THE SHIFT LAB // ANALOG & DSP ENGINEERING
+ALL TRANSFERS RECORDED AT 24-BIT / 48KHZ
+// =========================================================================
+// TODO 1: Paste your PayPal payment link inside the quotes below
+// Example: "paypal.com"
+// =========================================================================
+const PAYPAL_PAYMENT_URL = "paypal.com";
+// =========================================================================
+// TODO 2: When you upload an MP3/WAV demo file to your GitHub repo,
+// put its filename here (e.g., "epoimi_demo.mp3").
+// Leave empty "" to use the built-in WebAudio analog drum synthesizer!
+// =========================================================================
+const DEMO_AUDIO_URL = "";
+document.getElementById("paypal-buy-btn").href = PAYPAL_PAYMENT_URL;
+// Build 24-segment VFD VU meters
+function buildMeter(id) {
+const el = document.getElementById(id);
+for (let i = 0; i < 24; i++) {
+const seg = document.createElement("div");
+seg.className = "vu-seg";
+el.appendChild(seg);
+}
+}
+buildMeter("vu-left");
+buildMeter("vu-right");
+let isPlaying = false;
+let currentMode = "WET";
+let meterTimer = null;
+let synthTimer = null;
+let audioCtx = null;
+let htmlAudio = null;
+let step = 0;
+function setMode(mode) {
+currentMode = mode;
+const btnDry = document.getElementById("btn-dry");
+const btnWet = document.getElementById("btn-wet");
+const ledDry = document.getElementById("led-dry");
+const ledWet = document.getElementById("led-wet");
+const status = document.getElementById("mode-status");
+if (mode === "DRY") {
+btnDry.classList.add("pressed");
+btnWet.classList.remove("pressed");
+ledDry.className = "led-indicator on-green";
+ledWet.className = "led-indicator";
+status.textContent = "[PATH: DIGITAL BYPASS / DRY]";
+status.style.color = "#2cf5c6";
+} else {
+btnWet.classList.add("pressed");
+btnDry.classList.remove("pressed");
+ledWet.className = "led-indicator on-amber";
+ledDry.className = "led-indicator";
+status.textContent = "[PATH: DISCRETE CONSOLE + VHS LIMITER]";
+status.style.color = "#ffaa1d";
+}
+}
+function updateMeters(levelL, levelR) {
+const leftSegs = document.getElementById("vu-left").children;
+const rightSegs = document.getElementById("vu-right").children;
+for (let i = 0; i < 24; i++) {
+leftSegs[i].className = "vu-seg";
+rightSegs[i].className = "vu-seg";
+if (i < levelL) {
+leftSegs[i].classList.add(i > 19 ? "active-red" : i > 14 ? "active-amber" : "active-cyan");
+}
+if (i < levelR) {
+rightSegs[i].classList.add(i > 19 ? "active-red" : i > 14 ? "active-amber" : "active-cyan");
+}
+}
+}
+// Built-in WebAudio Analog Drum Beat Simulator (active until MP3 is added)
+function triggerDrumHit(type) {
+if (!audioCtx) {
+audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+if (audioCtx.state === "suspended") audioCtx.resume();
+const now = audioCtx.currentTime;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+const shaper = audioCtx.createWaveShaper();
+const amount = currentMode === "WET" ? 45 : 0;
+const curve = new Float32Array(256);
+for (let i = 0; i < 256; i++) {
+const x = (i * 2) / 256 - 1;
+curve[i] = amount > 0 ? ((3 + amount) * x * 20 * (Math.PI / 180)) / (Math.PI + amount * Math.abs(x)) : x;
+}
+shaper.curve = curve;
+if (type === "KICK") {
+osc.type = "sine";
+osc.frequency.setValueAtTime(currentMode === "WET" ? 135 : 115, now);
+osc.frequency.exponentialRampToValueAtTime(38, now + 0.16);
+gain.gain.setValueAtTime(currentMode === "WET" ? 0.9 : 0.65, now);
+gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+osc.connect(shaper);
+shaper.connect(gain);
+gain.connect(audioCtx.destination);
+osc.start(now);
+osc.stop(now + 0.25);
+updateMeters(currentMode === "WET" ? 22 : 16, currentMode === "WET" ? 21 : 16);
+} else if (type === "SNARE") {
+const bufferSize = audioCtx.sampleRate * 0.16;
+const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+const data = buffer.getChannelData(0);
+for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+const noise = audioCtx.createBufferSource();
+noise.buffer = buffer;
+const filter = audioCtx.createBiquadFilter();
+filter.type = "bandpass";
+filter.frequency.value = currentMode === "WET" ? 1400 : 2200;
+const nGain = audioCtx.createGain();
+nGain.gain.setValueAtTime(currentMode === "WET" ? 0.75 : 0.45, now);
+nGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+noise.connect(filter);
+filter.connect(shaper);
+shaper.connect(nGain);
+nGain.connect(audioCtx.destination);
+noise.start(now);
+updateMeters(currentMode === "WET" ? 23 : 17, currentMode === "WET" ? 22 : 15);
+} else {
+const bufferSize = audioCtx.sampleRate * 0.04;
+const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+const data = buffer.getChannelData(0);
+for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+const noise = audioCtx.createBufferSource();
+noise.buffer = buffer;
+const hGain = audioCtx.createGain();
+hGain.gain.setValueAtTime(0.18, now);
+hGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+noise.connect(hGain);
+hGain.connect(audioCtx.destination);
+noise.start(now);
+updateMeters(currentMode === "WET" ? 13 : 9, currentMode === "WET" ? 14 : 9);
+}
+}
+function togglePlay() {
+if (isPlaying) {
+stopAudio();
+return;
+}
+isPlaying = true;
+document.getElementById("btn-play").classList.add("pressed");
+document.getElementById("led-play").className = "led-indicator on-green";
+if (DEMO_AUDIO_URL) {
+htmlAudio = new Audio(DEMO_AUDIO_URL);
+htmlAudio.loop = true;
+htmlAudio.play();
+meterTimer = setInterval(() => {
+const base = currentMode === "WET" ? 16 : 11;
+updateMeters(base + Math.floor(Math.random() * 8), base + Math.floor(Math.random() * 8));
+}, 90);
+} else {
+const pattern = ["KICK", "HAT", "SNARE", "HAT", "KICK", "KICK", "SNARE", "HAT"];
+step = 0;
+triggerDrumHit(pattern);
+synthTimer = setInterval(() => {
+step = (step + 1) % pattern.length;
+triggerDrumHit(pattern[step]);
+}, 240);
+meterTimer = setInterval(() => {
+const leftSegs = document.getElementById("vu-left").children;
+let activeCount = 0;
+for (let s of leftSegs) if (s.classList.length > 1) activeCount++;
+if (activeCount > 2) updateMeters(activeCount - 2, activeCount - 2);
+}, 65);
+}
+}
+function stopAudio() {
+isPlaying = false;
+document.getElementById("btn-play").classList.remove("pressed");
+document.getElementById("led-play").className = "led-indicator";
+if (htmlAudio) {
+htmlAudio.pause();
+htmlAudio.currentTime = 0;
+}
+clearInterval(synthTimer);
+clearInterval(meterTimer);
+updateMeters(0, 0);
+}
