@@ -5,17 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ANGLE OF THE SHIFT // Analog Hardware & Custom DSP Lab</title>
 <style>
-  /* =====================================================================
-     QUICK CONFIG: Find "TODO" in <script> at the bottom to paste your
-     PayPal link and MP3 demo filename!
-     ===================================================================== */
-
   :root {
     --chassis-dark: #1d1f21;
-    --chassis-mid: #2a2d30;
-    --alu-light: #d6d9dc;
-    --alu-mid: #b4b9be;
-    --alu-dark: #888e94;
     --screen-bg: #07120e;
     --vfd-cyan: #2cf5c6;
     --vfd-amber: #ffaa1d;
@@ -32,7 +23,7 @@
 
   body {
     background-color: #121315;
-    background-image: 
+    background-image:
       radial-gradient(circle at 50% 0%, #25282c 0%, #101113 80%),
       repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
     color: #e2e5e8;
@@ -42,20 +33,16 @@
     padding: 18px 10px 40px;
   }
 
-  /* MAIN RACKMOUNT CHASSIS */
   .rack-unit {
     max-width: 960px;
     margin: 0 auto;
     background: var(--chassis-dark);
     border: 3px solid #090a0b;
     border-radius: 6px;
-    box-shadow: 
-      0 20px 50px rgba(0,0,0,0.85),
-      inset 0 1px 0 rgba(255,255,255,0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.15);
     overflow: hidden;
   }
 
-  /* BRUSHED ALUMINUM TOP FACEPLATE */
   .faceplate-alu {
     background: linear-gradient(180deg, #dfe2e5 0%, #c4c9ce 48%, #aeb4ba 52%, #c9ced3 100%);
     color: var(--ink-dark);
@@ -65,7 +52,6 @@
     box-shadow: inset 0 2px 3px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,0,0,0.35);
   }
 
-  /* RACK SCREWS */
   .screw {
     width: 14px;
     height: 14px;
@@ -139,7 +125,6 @@
     margin-top: 4px;
   }
 
-  /* POWER SWITCH & PILOT LED */
   .power-block {
     display: flex;
     align-items: center;
@@ -158,6 +143,7 @@
     border: 1px solid #111;
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
     transition: 0.2s;
+    display: inline-block;
   }
 
   .led-indicator.on-red {
@@ -175,7 +161,6 @@
     box-shadow: 0 0 8px var(--vfd-amber), inset 0 1px 2px #fff;
   }
 
-  /* TACTILE HARDWARE PUSH BUTTONS */
   .hw-btn {
     background: linear-gradient(180deg, #f2f4f6 0%, #cfd4d9 85%, #9aa0a6 100%);
     color: #141618;
@@ -192,20 +177,14 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    box-shadow: 
-      0 3px 0 #464b50,
-      0 4px 6px rgba(0,0,0,0.45),
-      inset 0 1px 0 #ffffff;
+    box-shadow: 0 3px 0 #464b50, 0 4px 6px rgba(0,0,0,0.45), inset 0 1px 0 #ffffff;
     transition: transform 0.06s, box-shadow 0.06s;
     user-select: none;
   }
 
   .hw-btn:active, .hw-btn.pressed {
     transform: translateY(2px);
-    box-shadow: 
-      0 1px 0 #464b50,
-      0 2px 3px rgba(0,0,0,0.4),
-      inset 0 2px 4px rgba(0,0,0,0.25);
+    box-shadow: 0 1px 0 #464b50, 0 2px 3px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.25);
     background: linear-gradient(180deg, #c5cacf 0%, #dce0e4 100%);
   }
 
@@ -213,10 +192,7 @@
     background: linear-gradient(180deg, #3e4247 0%, #272a2e 85%, #191b1d 100%);
     color: #eef1f4;
     border: 1.5px solid #0b0c0d;
-    box-shadow: 
-      0 3px 0 #0e0f10,
-      0 4px 6px rgba(0,0,0,0.5),
-      inset 0 1px 0 rgba(255,255,255,0.2);
+    box-shadow: 0 3px 0 #0e0f10, 0 4px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
   }
 
   .hw-btn-dark:active, .hw-btn-dark.pressed {
@@ -228,13 +204,9 @@
     background: linear-gradient(180deg, #ffc44d 0%, #e69500 85%, #b37400 100%);
     color: #111;
     border: 1.5px solid #3d2600;
-    box-shadow: 
-      0 3px 0 #664200,
-      0 4px 8px rgba(0,0,0,0.5),
-      inset 0 1px 0 #ffe6b3;
+    box-shadow: 0 3px 0 #664200, 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 0 #ffe6b3;
   }
 
-  /* NAVIGATION BAR (SELECTOR SWITCHES) */
   .selector-bar {
     background: #17191b;
     padding: 10px 20px;
@@ -245,7 +217,6 @@
     justify-content: center;
   }
 
-  /* SECTIONS */
   .module-section {
     padding: 22px 24px;
     border-bottom: 3px solid #101113;
@@ -285,7 +256,6 @@
     font-family: "Courier New", monospace;
   }
 
-  /* VFD TAPE DECK & A/B AUDIO MONITOR */
   .vfd-bezel {
     background: #0a0c0d;
     border: 3px solid #35393e;
@@ -296,7 +266,7 @@
 
   .vfd-screen {
     background-color: var(--screen-bg);
-    background-image: 
+    background-image:
       linear-gradient(rgba(44, 245, 198, 0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(44, 245, 198, 0.04) 1px, transparent 1px);
     background-size: 4px 4px;
@@ -326,10 +296,9 @@
     font-weight: bold;
   }
 
-  /* SEGMENTED VU METER */
   .vu-container {
     display: grid;
-    grid-template-columns: 28px 1fr 48px;
+    grid-template-columns: 36px 1fr 48px;
     align-items: center;
     gap: 8px;
     margin-top: 6px;
@@ -381,7 +350,6 @@
     gap: 8px;
   }
 
-  /* SIGNAL FLOW SVG SCHEMATIC */
   .schematic-box {
     background: #121518;
     border: 1.5px solid #353a40;
@@ -399,7 +367,6 @@
     margin-bottom: 8px;
   }
 
-  /* FEATURED SAMPLE PACK CARD (EPOIMI) */
   .release-box {
     background: linear-gradient(135deg, #292d32 0%, #1c1e21 100%);
     border: 2px solid #c99228;
@@ -411,6 +378,48 @@
     align-items: center;
     box-shadow: 0 8px 20px rgba(0,0,0,0.5);
   }
+
+  .cassette-art {
+    background: #141517;
+    border: 2px solid #454a50;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: inset 0 0 10px #000;
+  }
+
+  .release-info h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .release-tag {
+    display: inline-block;
+    background: var(--vfd-amber);
+    color: #111;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+
+  .buy-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed #454a50;
+  }
+
+  .price-tag {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
+
 
 
 
