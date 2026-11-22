@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ANGLE OF THE SHIFT // Analog Hardware & Custom DSP Lab</title>
 <style>
-  :root { 
+  :root {
     --chassis-dark: #1d1f21;
     --screen-bg: #07120e;
     --vfd-cyan: #2cf5c6;
@@ -40,7 +40,6 @@
     overflow: hidden;
   }
 
-  /* BRUSHED ALUMINUM TOP FACEPLATE */
   .faceplate-alu {
     background: linear-gradient(180deg, #dfe2e5 0%, #c4c9ce 48%, #aeb4ba 52%, #c9ced3 100%);
     color: var(--ink-dark);
@@ -159,7 +158,6 @@
     box-shadow: 0 0 8px var(--vfd-amber), inset 0 1px 2px #fff;
   }
 
-  /* TACTILE HARDWARE BUTTONS */
   .hw-btn {
     background: linear-gradient(180deg, #f2f4f6 0%, #cfd4d9 85%, #9aa0a6 100%);
     color: #141618;
@@ -206,7 +204,6 @@
     box-shadow: 0 3px 0 #664200, 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 0 #ffe6b3;
   }
 
-  /* SELECTOR BAR */
   .selector-bar {
     background: #17191b;
     padding: 10px 16px;
@@ -217,7 +214,6 @@
     justify-content: center;
   }
 
-  /* MODULE SECTIONS */
   .module-section {
     padding: 22px 24px;
     border-bottom: 3px solid #101113;
@@ -257,7 +253,6 @@
     font-family: "Courier New", monospace;
   }
 
-  /* VFD TAPE DECK & A/B MONITOR */
   .vfd-bezel {
     background: #0a0c0d;
     border: 3px solid #35393e;
@@ -352,7 +347,6 @@
     gap: 8px;
   }
 
-  /* SIGNAL FLOW SVG SCHEMATIC */
   .schematic-box {
     background: #121518;
     border: 1.5px solid #353a40;
@@ -370,7 +364,6 @@
     margin-bottom: 8px;
   }
 
-  /* FEATURED SAMPLE PACK CARD */
   .release-box {
     background: linear-gradient(135deg, #292d32 0%, #1c1e21 100%);
     border: 2px solid #c99228;
@@ -423,3 +416,15 @@
   .price-tag {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 22px;
+    font-weight: 900;
+    color: var(--vfd-cyan);
+    text-shadow: 0 0 8px rgba(44,245,198,0.35);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 14px;
+  }
+
+  .rack-card {
