@@ -1,19 +1,10 @@
-<html lang="en"> 
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ANGLE OF THE SHIFT // Analog Hardware & Custom DSP Lab</title>
 <style>
-  :root {
-    --chassis-dark: #1d1f21;
-    --screen-bg: #07120e;
-    --vfd-cyan: #2cf5c6;
-    --vfd-amber: #ffaa1d;
-    --led-red: #ff2a2a;
-    --led-green: #24ff4b;
-    --ink-dark: #141618;
-  }
-
   * {
     box-sizing: border-box;
     margin: 0;
@@ -21,409 +12,458 @@
   }
 
   body {
-    background-color: #16181a;
-    color: #e2e5e8;
-    font-family: "Courier New", Courier, "Lucida Console", monospace;
+    background-color: #181a1d;
+    color: #e4e7eb;
+    font-family: "Courier New", Courier, monospace;
     font-size: 14px;
     line-height: 1.5;
-    padding: 18px 10px 40px;
+    padding: 16px 10px 40px;
   }
 
-  .rack-unit {
-    max-width: 960px;
+  .rack {
+    max-width: 920px;
     margin: 0 auto;
-    background: var(--chassis-dark);
-    border: 3px solid #090a0b;
+    background-color: #22252a;
+    border: 3px solid #0c0d0f;
     border-radius: 6px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.15);
-    overflow: hidden;
   }
 
-  .faceplate-alu {
-    background: linear-gradient(180deg, #dfe2e5 0%, #c4c9ce 48%, #aeb4ba 52%, #c9ced3 100%);
-    color: var(--ink-dark);
-    padding: 18px 24px 20px;
-    border-bottom: 4px solid #0b0c0d;
-    position: relative;
-    box-shadow: inset 0 2px 3px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,0,0,0.35);
+  /* BRUSHED ALUMINUM TOP PANEL */
+  .alu-panel {
+    background: linear-gradient(180deg, #e1e4e8 0%, #c2c7cc 50%, #cfd4d9 100%);
+    color: #141618;
+    padding: 18px 22px;
+    border-bottom: 4px solid #0c0d0f;
   }
 
-  .screw {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #f0f2f4, #6c7278);
-    border: 1px solid #2b2e31;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.7);
-    position: absolute;
-  }
-  .screw::after {
-    content: "";
-    position: absolute;
-    top: 6px;
-    left: 2px;
-    width: 8px;
-    height: 1.5px;
-    background: #2b2e31;
-    transform: rotate(-35deg);
-  }
-  .screw.tl { top: 10px; left: 10px; }
-  .screw.tr { top: 10px; right: 10px; }
-  .screw.bl { bottom: 10px; left: 10px; }
-  .screw.br { bottom: 10px; right: 10px; }
-
-  .top-badges {
+  .top-meta {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
     font-size: 11px;
     font-weight: bold;
-    letter-spacing: 1px;
+    color: #30343a;
+    margin-bottom: 10px;
     text-transform: uppercase;
-    margin-bottom: 12px;
-    padding: 0 12px;
-    color: #2c3035;
   }
 
-  .gost-stamp {
-    border: 1.5px solid #2c3035;
+  .stamp {
+    border: 1.5px solid #30343a;
     padding: 1px 6px;
-    border-radius: 2px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: 900;
-    letter-spacing: 0.5px;
   }
 
-  .brand-row {
+  .header-main {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
-    padding: 0 12px;
+    gap: 12px;
   }
 
-  .brand-title h1 {
+  .header-main h1 {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 900;
     letter-spacing: 2px;
     color: #111315;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
-    line-height: 1.1;
   }
 
-  .brand-sub {
+  .subtitle {
     font-size: 12px;
     font-weight: bold;
-    color: #353a40;
-    letter-spacing: 1.2px;
-    margin-top: 4px;
+    color: #353940;
+    margin-top: 3px;
   }
 
-  .power-block {
+  .pwr-box {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(0,0,0,0.08);
-    padding: 8px 12px;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.08);
+    border: 1px solid #8a9096;
+    padding: 6px 12px;
     border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.2);
+    font-size: 11px;
+    font-weight: bold;
   }
 
-  .led-indicator {
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: #3a1111;
-    border: 1px solid #111;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
-    transition: 0.2s;
+  .led {
     display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3d1414;
+    border: 1px solid #111;
   }
 
-  .led-indicator.on-red {
-    background: var(--led-red);
-    box-shadow: 0 0 8px var(--led-red), 0 0 16px rgba(255,42,42,0.6), inset 0 1px 2px #fff;
+  .led-red {
+    background-color: #ff2e2e;
+    box-shadow: 0 0 8px #ff2e2e;
   }
 
-  .led-indicator.on-green {
-    background: var(--led-green);
-    box-shadow: 0 0 8px var(--led-green), 0 0 14px rgba(36,255,75,0.6), inset 0 1px 2px #fff;
+  .led-green {
+    background-color: #24ff4b;
+    box-shadow: 0 0 8px #24ff4b;
   }
 
-  .led-indicator.on-amber {
-    background: var(--vfd-amber);
-    box-shadow: 0 0 8px var(--vfd-amber), inset 0 1px 2px #fff;
+  .led-amber {
+    background-color: #ffaa1d;
+    box-shadow: 0 0 8px #ffaa1d;
   }
 
-  .hw-btn {
-    background: linear-gradient(180deg, #f2f4f6 0%, #cfd4d9 85%, #9aa0a6 100%);
-    color: #141618;
-    border: 1.5px solid #1e2022;
-    border-radius: 3px;
-    padding: 7px 13px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 3px 0 #464b50, 0 4px 6px rgba(0,0,0,0.45), inset 0 1px 0 #ffffff;
-    transition: transform 0.06s, box-shadow 0.06s;
-    user-select: none;
-  }
-
-  .hw-btn:active, .hw-btn.pressed {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 #464b50, 0 2px 3px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.25);
-    background: linear-gradient(180deg, #c5cacf 0%, #dce0e4 100%);
-  }
-
-  .hw-btn-dark {
-    background: linear-gradient(180deg, #3e4247 0%, #272a2e 85%, #191b1d 100%);
-    color: #eef1f4;
-    border: 1.5px solid #0b0c0d;
-    box-shadow: 0 3px 0 #0e0f10, 0 4px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
-  }
-
-  .hw-btn-dark:active, .hw-btn-dark.pressed {
-    background: linear-gradient(180deg, #222528 0%, #31353a 100%);
-    box-shadow: 0 1px 0 #0e0f10, inset 0 2px 5px rgba(0,0,0,0.6);
-  }
-
-  .hw-btn-amber {
-    background: linear-gradient(180deg, #ffc44d 0%, #e69500 85%, #b37400 100%);
-    color: #111;
-    border: 1.5px solid #3d2600;
-    box-shadow: 0 3px 0 #664200, 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 0 #ffe6b3;
-  }
-
-  .selector-bar {
-    background: #17191b;
+  /* BUTTONS & SELECTORS */
+  .nav-bar {
+    background-color: #16181b;
     padding: 10px 16px;
-    border-bottom: 2px solid #090a0b;
+    border-bottom: 2px solid #0c0d0f;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
   }
 
-  .module-section {
-    padding: 22px 24px;
-    border-bottom: 3px solid #101113;
-    background: linear-gradient(180deg, #212427 0%, #1b1d20 100%);
-    position: relative;
+  .btn {
+    background: linear-gradient(180deg, #42464c 0%, #282b30 100%);
+    color: #f0f3f6;
+    border: 1.5px solid #0c0d0f;
+    border-radius: 3px;
+    padding: 7px 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 
-  .module-header {
+  .btn:active, .btn.active {
+    background: #1c1e22;
+    border-color: #ffaa1d;
+  }
+
+  .btn-gold {
+    background: linear-gradient(180deg, #ffc44d 0%, #e09100 100%);
+    color: #111111;
+    border: 1.5px solid #3d2600;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 20px 22px;
+    border-bottom: 3px solid #121417;
+  }
+
+  .sec-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    border-bottom: 1px solid #383c42;
+    border-bottom: 1px solid #3c4047;
     padding-bottom: 8px;
-    margin-bottom: 16px;
-  }
-
-  .module-title {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-    color: #f0f3f6;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .module-code {
-    background: #101214;
-    color: var(--vfd-amber);
-    border: 1px solid #3c4046;
-    padding: 2px 7px;
-    font-size: 11px;
-    font-family: "Courier New", monospace;
-  }
-
-  .vfd-bezel {
-    background: #0a0c0d;
-    border: 3px solid #35393e;
-    border-radius: 5px;
-    padding: 14px;
-    box-shadow: inset 0 4px 12px rgba(0,0,0,0.95), 0 1px 0 rgba(255,255,255,0.1);
-  }
-
-  .vfd-screen {
-    background-color: var(--screen-bg);
-    background-image:
-      linear-gradient(rgba(44, 245, 198, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(44, 245, 198, 0.04) 1px, transparent 1px);
-    background-size: 4px 4px;
-    border: 1px solid #16382e;
-    border-radius: 3px;
-    padding: 14px;
-    color: var(--vfd-cyan);
-    text-shadow: 0 0 6px rgba(44, 245, 198, 0.55);
     margin-bottom: 14px;
   }
 
-  .vfd-top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 12px;
-    margin-bottom: 10px;
-    border-bottom: 1px dashed rgba(44, 245, 198, 0.25);
-    padding-bottom: 8px;
-  }
-
-  .vfd-mode-badge {
-    color: var(--vfd-amber);
-    text-shadow: 0 0 6px rgba(255, 170, 29, 0.6);
-    font-weight: bold;
-  }
-
-  .vu-container {
-    display: grid;
-    grid-template-columns: 36px 1fr 48px;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-    font-size: 11px;
-  }
-
-  .vu-bar {
-    display: grid;
-    grid-template-columns: repeat(24, 1fr);
-    gap: 2px;
-    height: 12px;
-    background: #030806;
-    padding: 2px;
-    border: 1px solid #14332a;
-  }
-
-  .vu-seg {
-    background: #0d261f;
-    border-radius: 1px;
-    transition: background 0.05s;
-  }
-
-  .vu-seg.active-cyan {
-    background: var(--vfd-cyan);
-    box-shadow: 0 0 5px var(--vfd-cyan);
-  }
-
-  .vu-seg.active-amber {
-    background: var(--vfd-amber);
-    box-shadow: 0 0 5px var(--vfd-amber);
-  }
-
-  .vu-seg.active-red {
-    background: var(--led-red);
-    box-shadow: 0 0 6px var(--led-red);
-  }
-
-  .deck-transport {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .transport-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .schematic-box {
-    background: #121518;
-    border: 1.5px solid #353a40;
-    border-radius: 4px;
-    padding: 12px;
-    margin-top: 14px;
-    overflow-x: auto;
-  }
-
-  .schematic-caption {
-    font-size: 11px;
-    color: #9aa1a8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
-
-  .release-box {
-    background: linear-gradient(135deg, #292d32 0%, #1c1e21 100%);
-    border: 2px solid #c99228;
-    border-radius: 5px;
-    padding: 18px;
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 20px;
-    align-items: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-  }
-
-  .cassette-art {
-    background: #141517;
-    border: 2px solid #454a50;
-    border-radius: 6px;
-    padding: 10px;
-    text-align: center;
-    box-shadow: inset 0 0 10px #000;
-  }
-
-  .release-info h3 {
+  .sec-title {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 20px;
-    color: #fff;
-    margin-bottom: 6px;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  .release-tag {
+  .tag-code {
+    background-color: #121417;
+    color: #ffaa1d;
+    border: 1px solid #3c4047;
+    padding: 2px 7px;
+    font-size: 11px;
+  }
+
+  /* RELEASE CARD */
+  .release-card {
+    background-color: #292d33;
+    border: 2px solid #d49622;
+    border-radius: 5px;
+    padding: 16px;
+  }
+
+  .badge-new {
     display: inline-block;
-    background: var(--vfd-amber);
-    color: #111;
+    background-color: #ffaa1d;
+    color: #111111;
     font-weight: bold;
     font-size: 11px;
     padding: 2px 7px;
-    border-radius: 2px;
     margin-bottom: 8px;
   }
 
-  .buy-bar {
+  .release-card h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 19px;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+
+  .buy-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 14px;
     margin-top: 14px;
     padding-top: 12px;
-    border-top: 1px dashed #454a50;
+    border-top: 1px dashed #4a4f57;
   }
 
-  .price-tag {
+  .price {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 22px;
     font-weight: 900;
-    color: var(--vfd-cyan);
-    text-shadow: 0 0 8px rgba(44,245,198,0.35);
+    color: #2cf5c6;
   }
 
+  /* VFD AUDIO MONITOR */
+  .vfd-box {
+    background-color: #0b0d0f;
+    border: 3px solid #3a3e45;
+    border-radius: 4px;
+    padding: 12px;
+  }
+
+  .vfd-screen {
+    background-color: #071410;
+    border: 1px solid #184236;
+    padding: 12px;
+    color: #2cf5c6;
+    margin-bottom: 12px;
+  }
+
+  .vfd-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .vu-line {
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    color: #ffaa1d;
+    letter-spacing: 1px;
+  }
+
+  .controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* SIGNAL FLOW DIAGRAM */
+  .flow-box {
+    background-color: #141619;
+    border: 1.5px solid #3a3e45;
+    padding: 12px;
+    margin-top: 12px;
+    overflow-x: auto;
+  }
+
+  .flow-chain {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 580px;
+    font-size: 11px;
+  }
+
+  .flow-node {
+    border: 1.5px solid #2cf5c6;
+    background-color: #1d2126;
+    padding: 8px 10px;
+    text-align: center;
+    flex: 1;
+  }
+
+  .flow-node.highlight {
+    border-color: #ffaa1d;
+    background-color: #2b2214;
+    color: #ffaa1d;
+  }
+
+  .flow-arrow {
+    color: #2cf5c6;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  /* GRID CARDS */
   .grid-2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 14px;
   }
 
-  .rack-card {
+  .card {
+    background-color: #181a1e;
+    border: 1.5px solid #383c42;
+    border-radius: 4px;
+    padding: 14px;
+  }
+
+  .card h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #ffaa1d;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #2d3136;
+    padding-bottom: 5px;
+  }
+
+  .spec-list {
+    list-style: none;
+  }
+
+  .spec-list li {
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #d2d6dc;
+  }
+
+  .spec-list li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: #2cf5c6;
+  }
+
+  /* BLOG ARTICLE */
+  .article-box {
+    background-color: #16181c;
+    border: 1.5px solid #3c4047;
+    border-radius: 4px;
+    padding: 18px;
+  }
+
+  .article-meta {
+    font-size: 11px;
+    color: #2cf5c6;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .article-box h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 12px;
+  }
+
+  .article-box h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #ffaa1d;
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+  }
+
+  .article-box p {
+    color: #d2d6dc;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background-color: #16181c;
+  }
+
+  th, td {
+    border: 1px solid #383c42;
+    padding: 9px 11px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #282c32;
+    color: #ffaa1d;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+  }
+
+  footer {
+    background-color: #121417;
+    padding: 14px 22px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: #8c929a;
+  }
+</style>
+</head>
+<body>
+
+<div class="rack">
+  <div class="alu-panel">
+    <div class="top-meta">
+      <span>UNIT: AOTS-615 // STEREO ANALOG &amp; DSP PROCESSOR</span>
+      <span class="stamp">CUSTOM LAB // 24-BIT</span>
+    </div>
+    <div class="header-main">
+      <div>
+        <h1>ANGLE OF THE SHIFT</h1>
+        <div class="subtitle">VINTAGE ANALOG HARDWARE // CUSTOM C++ DSP // SAMPLE ARCHIVE</div>
+      </div>
+      <div class="pwr-box">
+        <span class="led led-red"></span>
+        <span>220V / 50Hz<br>LAB ONLINE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-bar">
+    <a href="#pack" class="btn btn-gold"><span class="led led-red"></span> 01. EPOIMI PACK ($7)</a>
+    <a href="#monitor" class="btn"><span class="led led-green"></span> 02. A/B MONITOR</a>
+    <a href="#rig" class="btn"><span class="led led-amber"></span> 03. ANALOG RIG</a>
+    <a href="#dsp" class="btn"><span class="led led-green"></span> 04. DSP ENGINE</a>
+    <a href="#blog" class="btn"><span class="led led-amber"></span> 05. BLOG</a>
+    <a href="#services" class="btn">06. RE-AMP &amp; MIX</a>
+  </div>
+
+  <div class="section" id="pack">
+    <div class="sec-head">
+      <div class="sec-title"><span class="led led-red"></span> 01 // FIRST RELEASE: EPOIMI DRUM KIT</div>
+      <span class="tag-code">CAT. NO: AOTS-001 // 24-BIT WAV</span>
+    </div>
+
+    <div class="release-card">
+      <span class="badge-new">NEW RELEASE // INSTANT DOWNLOAD</span>
+      <h3>EPOIMI — Raw Vintage Drum One-Shots (13 WAVs)</h3>
+      <p style="margin-bottom:10px; color:#d6dade;">
+        Rare vintage <strong>"Epoimi"</strong> acoustic drum kit fitted with both dead-stock vintage drumheads and modern skins. Tracked with vintage dynamic microphones through a discrete analog mixing console and driven hot into our Perestroika-era <strong>Roadstar VCP-615K</strong> VCR (barter-assembled at the NLMK steel plant) used as a physical magnetic limiter.
+      </p>
+      <p style="font-size:12px; color:#a2a8b0;">
