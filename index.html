@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ANGLE OF THE SHIFT // Analog Hardware & Custom DSP Lab</title>
 <style>
+  :root {
+    --chassis-dark: #1d1f21;
+    --screen-bg: #07120e;
+    --vfd-cyan: #2cf5c6;
+    --vfd-amber: #ffaa1d;
+    --led-red: #ff2a2a;
+    --led-green: #24ff4b;
+    --ink-dark: #141618;
+  }
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -13,397 +24,404 @@
   }
 
   body {
-    background-color: #008080;
-    color: #000000;
-    font-family: "Courier New", Courier, monospace;
+    background-color: #16181a;
+    color: #e2e5e8;
+    font-family: "Courier New", Courier, "Lucida Console", monospace;
     font-size: 14px;
-    line-height: 1.45;
-    padding: 16px 10px 40px;
+    line-height: 1.5;
+    padding: 18px 10px 40px;
   }
 
-  /* WIN95 WINDOW */
-  .win-window {
-    max-width: 920px;
+  .rack-unit {
+    max-width: 960px;
     margin: 0 auto;
-    background-color: #c0c0c0;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    padding: 3px;
+    background: var(--chassis-dark);
+    border: 3px solid #090a0b;
+    border-radius: 6px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.15);
+    overflow: hidden;
   }
 
-  /* WIN95 TITLE BAR */
-  .win-titlebar {
-    background-color: #000080;
-    color: #ffffff;
-    font-family: Tahoma, Arial, sans-serif;
-    font-weight: bold;
-    font-size: 13px;
-    padding: 4px 8px;
+  /* BRUSHED ALUMINUM TOP FACEPLATE */
+  .faceplate-alu {
+    background: linear-gradient(180deg, #dfe2e5 0%, #c4c9ce 48%, #aeb4ba 52%, #c9ced3 100%);
+    color: var(--ink-dark);
+    padding: 18px 24px 20px;
+    border-bottom: 4px solid #0b0c0d;
+    position: relative;
+    box-shadow: inset 0 2px 3px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,0,0,0.35);
+  }
+
+  .screw {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f0f2f4, #6c7278);
+    border: 1px solid #2b2e31;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.7);
+    position: absolute;
+  }
+  .screw::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 2px;
+    width: 8px;
+    height: 1.5px;
+    background: #2b2e31;
+    transform: rotate(-35deg);
+  }
+  .screw.tl { top: 10px; left: 10px; }
+  .screw.tr { top: 10px; right: 10px; }
+  .screw.bl { bottom: 10px; left: 10px; }
+  .screw.br { bottom: 10px; right: 10px; }
+
+  .top-badges {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .win-controls {
-    display: flex;
-    gap: 3px;
-  }
-
-  .win-ctrl-btn {
-    background-color: #c0c0c0;
-    color: #000000;
-    border-top: 1px solid #ffffff;
-    border-left: 1px solid #ffffff;
-    border-right: 1px solid #404040;
-    border-bottom: 1px solid #404040;
-    width: 16px;
-    height: 15px;
-    font-size: 10px;
-    line-height: 12px;
-    text-align: center;
+    font-size: 11px;
     font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding: 0 12px;
+    color: #2c3035;
   }
 
-  /* MENU BAR */
-  .win-menubar {
-    background-color: #c0c0c0;
-    padding: 6px 8px;
-    border-bottom: 1px solid #808080;
+  .gost-stamp {
+    border: 1.5px solid #2c3035;
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  .brand-row {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 15px;
+    padding: 0 12px;
   }
 
-  /* 3D WIN95 BUTTON */
-  .win-btn {
-    background-color: #c0c0c0;
-    color: #000000;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    padding: 5px 12px;
-    font-family: Tahoma, Arial, sans-serif;
+  .brand-title h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #111315;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    line-height: 1.1;
+  }
+
+  .brand-sub {
     font-size: 12px;
     font-weight: bold;
-    text-decoration: none;
-    cursor: pointer;
+    color: #353a40;
+    letter-spacing: 1.2px;
+    margin-top: 4px;
+  }
+
+  .power-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0,0,0,0.08);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.2);
+  }
+
+  .led-indicator {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #3a1111;
+    border: 1px solid #111;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+    transition: 0.2s;
     display: inline-block;
   }
 
-  .win-btn:active, .win-btn.active {
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
-    background-color: #b0b0b0;
+  .led-indicator.on-red {
+    background: var(--led-red);
+    box-shadow: 0 0 8px var(--led-red), 0 0 16px rgba(255,42,42,0.6), inset 0 1px 2px #fff;
   }
 
-  .win-btn-buy {
-    background-color: #000080;
-    color: #ffff55;
+  .led-indicator.on-green {
+    background: var(--led-green);
+    box-shadow: 0 0 8px var(--led-green), 0 0 14px rgba(36,255,75,0.6), inset 0 1px 2px #fff;
   }
 
-  /* CONTENT AREA */
-  .win-body {
-    padding: 14px;
+  .led-indicator.on-amber {
+    background: var(--vfd-amber);
+    box-shadow: 0 0 8px var(--vfd-amber), inset 0 1px 2px #fff;
   }
 
-  /* HEADER BANNER */
-  .header-box {
-    background-color: #c0c0c0;
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
-    padding: 14px;
-    margin-bottom: 14px;
+  /* TACTILE HARDWARE BUTTONS */
+  .hw-btn {
+    background: linear-gradient(180deg, #f2f4f6 0%, #cfd4d9 85%, #9aa0a6 100%);
+    color: #141618;
+    border: 1.5px solid #1e2022;
+    border-radius: 3px;
+    padding: 7px 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 3px 0 #464b50, 0 4px 6px rgba(0,0,0,0.45), inset 0 1px 0 #ffffff;
+    transition: transform 0.06s, box-shadow 0.06s;
+    user-select: none;
   }
 
-  .header-box h1 {
-    font-family: Tahoma, Arial, sans-serif;
-    font-size: 24px;
-    font-weight: bold;
-    color: #000080;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
+  .hw-btn:active, .hw-btn.pressed {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #464b50, 0 2px 3px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.25);
+    background: linear-gradient(180deg, #c5cacf 0%, #dce0e4 100%);
   }
 
-  .header-sub {
-    font-size: 13px;
-    color: #202020;
-    font-weight: bold;
+  .hw-btn-dark {
+    background: linear-gradient(180deg, #3e4247 0%, #272a2e 85%, #191b1d 100%);
+    color: #eef1f4;
+    border: 1.5px solid #0b0c0d;
+    box-shadow: 0 3px 0 #0e0f10, 0 4px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
   }
 
-  /* NORTON COMMANDER PANEL */
-  .nc-panel {
-    background-color: #000080;
-    color: #55ffff;
-    border: 2px solid #55ffff;
-    padding: 14px;
+  .hw-btn-dark:active, .hw-btn-dark.pressed {
+    background: linear-gradient(180deg, #222528 0%, #31353a 100%);
+    box-shadow: 0 1px 0 #0e0f10, inset 0 2px 5px rgba(0,0,0,0.6);
+  }
+
+  .hw-btn-amber {
+    background: linear-gradient(180deg, #ffc44d 0%, #e69500 85%, #b37400 100%);
+    color: #111;
+    border: 1.5px solid #3d2600;
+    box-shadow: 0 3px 0 #664200, 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 0 #ffe6b3;
+  }
+
+  /* SELECTOR BAR */
+  .selector-bar {
+    background: #17191b;
+    padding: 10px 16px;
+    border-bottom: 2px solid #090a0b;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  /* MODULE SECTIONS */
+  .module-section {
+    padding: 22px 24px;
+    border-bottom: 3px solid #101113;
+    background: linear-gradient(180deg, #212427 0%, #1b1d20 100%);
+    position: relative;
+  }
+
+  .module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px solid #383c42;
+    padding-bottom: 8px;
     margin-bottom: 16px;
   }
 
-  .nc-header {
-    background-color: #00aaaa;
-    color: #000000;
-    font-weight: bold;
-    padding: 3px 8px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .nc-title {
-    color: #ffff55;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 8px;
-  }
-
-  .nc-text {
-    color: #ffffff;
-    margin-bottom: 10px;
-  }
-
-  .nc-meta {
-    color: #55ffff;
-    font-size: 13px;
-    margin-bottom: 12px;
-  }
-
-  /* GROUPBOX (WIN95 FIELDSET) */
-  .win-group {
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
-    padding: 12px;
-    margin-bottom: 14px;
-    background-color: #c0c0c0;
-  }
-
-  .win-group-title {
-    font-family: Tahoma, Arial, sans-serif;
-    font-weight: bold;
-    font-size: 13px;
-    color: #000080;
-    margin-bottom: 10px;
+  .module-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: #f0f3f6;
     text-transform: uppercase;
-    border-bottom: 1px solid #808080;
-    padding-bottom: 4px;
-  }
-
-  /* AUDIO PLAYER BOX */
-  .player-screen {
-    background-color: #000000;
-    color: #00ff00;
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-
-  .player-row {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 6px;
   }
 
-  .vu-meter {
+  .module-code {
+    background: #101214;
+    color: var(--vfd-amber);
+    border: 1px solid #3c4046;
+    padding: 2px 7px;
+    font-size: 11px;
     font-family: "Courier New", monospace;
-    color: #ffff00;
-    font-weight: bold;
-    letter-spacing: 1px;
   }
 
-  .player-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+  /* VFD TAPE DECK & A/B MONITOR */
+  .vfd-bezel {
+    background: #0a0c0d;
+    border: 3px solid #35393e;
+    border-radius: 5px;
+    padding: 14px;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.95), 0 1px 0 rgba(255,255,255,0.1);
   }
 
-  /* ASCII SIGNAL DIAGRAM */
-  .ascii-box {
-    background-color: #000080;
-    color: #ffff55;
-    border: 1px solid #55ffff;
-    padding: 10px;
-    margin-top: 10px;
-    overflow-x: auto;
-    font-size: 12px;
-    white-space: pre;
-  }
-
-  /* TWO-COLUMN NC PANELS */
-  .nc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 12px;
+  .vfd-screen {
+    background-color: var(--screen-bg);
+    background-image:
+      linear-gradient(rgba(44, 245, 198, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(44, 245, 198, 0.04) 1px, transparent 1px);
+    background-size: 4px 4px;
+    border: 1px solid #16382e;
+    border-radius: 3px;
+    padding: 14px;
+    color: var(--vfd-cyan);
+    text-shadow: 0 0 6px rgba(44, 245, 198, 0.55);
     margin-bottom: 14px;
   }
 
-  .nc-box {
-    background-color: #000080;
-    color: #ffffff;
-    border: 2px solid #55ffff;
-    padding: 10px;
-  }
-
-  .nc-box-head {
-    color: #ffff55;
-    font-weight: bold;
-    border-bottom: 1px solid #55ffff;
-    padding-bottom: 4px;
-    margin-bottom: 8px;
-    text-align: center;
-  }
-
-  .nc-list {
-    list-style: none;
-  }
-
-  .nc-list li {
-    margin-bottom: 6px;
-    padding-left: 14px;
-    position: relative;
-    font-size: 13px;
-  }
-
-  .nc-list li::before {
-    content: ">";
-    position: absolute;
-    left: 0;
-    color: #55ffff;
-  }
-
-  /* WIN95 TABLE */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #ffffff;
-    color: #000000;
-    font-size: 13px;
-  }
-
-  th, td {
-    border: 1px solid #808080;
-    padding: 8px 10px;
-    text-align: left;
-  }
-
-  th {
-    background-color: #000080;
-    color: #ffffff;
-    font-family: Tahoma, Arial, sans-serif;
-  }
-
-  /* STATUS BAR */
-  .win-statusbar {
-    background-color: #c0c0c0;
-    border-top: 1px solid #808080;
-    padding: 5px 8px;
-    font-size: 12px;
+  .vfd-top-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(44, 245, 198, 0.25);
+    padding-bottom: 8px;
+  }
+
+  .vfd-mode-badge {
+    color: var(--vfd-amber);
+    text-shadow: 0 0 6px rgba(255, 170, 29, 0.6);
+    font-weight: bold;
+  }
+
+  .vu-container {
+    display: grid;
+    grid-template-columns: 36px 1fr 48px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 11px;
+  }
+
+  .vu-bar {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    gap: 2px;
+    height: 12px;
+    background: #030806;
+    padding: 2px;
+    border: 1px solid #14332a;
+  }
+
+  .vu-seg {
+    background: #0d261f;
+    border-radius: 1px;
+    transition: background 0.05s;
+  }
+
+  .vu-seg.active-cyan {
+    background: var(--vfd-cyan);
+    box-shadow: 0 0 5px var(--vfd-cyan);
+  }
+
+  .vu-seg.active-amber {
+    background: var(--vfd-amber);
+    box-shadow: 0 0 5px var(--vfd-amber);
+  }
+
+  .vu-seg.active-red {
+    background: var(--led-red);
+    box-shadow: 0 0 6px var(--led-red);
+  }
+
+  .deck-transport {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .transport-group {
+    display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
 
-  .status-cell {
-    border-top: 1px solid #808080;
-    border-left: 1px solid #808080;
-    border-right: 1px solid #ffffff;
-    border-bottom: 1px solid #ffffff;
-    padding: 2px 8px;
+  /* SIGNAL FLOW SVG SCHEMATIC */
+  .schematic-box {
+    background: #121518;
+    border: 1.5px solid #353a40;
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 14px;
+    overflow-x: auto;
   }
-</style>
-</head>
-<body>
 
-<div class="win-window">
-  <!-- WINDOW TITLE BAR -->
-  <div class="win-titlebar">
-    <span>C:\LAB\ANGLE_OF_THE_SHIFT.EXE - [Analog Hardware &amp; Custom DSP]</span>
-    <div class="win-controls">
-      <div class="win-ctrl-btn">_</div>
-      <div class="win-ctrl-btn">[]</div>
-      <div class="win-ctrl-btn">X</div>
-    </div>
-  </div>
+  .schematic-caption {
+    font-size: 11px;
+    color: #9aa1a8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
 
-  <!-- NAVIGATION MENU -->
-  <div class="win-menubar">
-    <a href="#release" class="win-btn win-btn-buy">[1] EPOIMI PACK ($7+)</a>
-    <a href="#player" class="win-btn">[2] A/B AUDIO MONITOR</a>
-    <a href="#rig" class="win-btn">[3] ANALOG &amp; DSP LAB</a>
-    <a href="#services" class="win-btn">[4] RE-AMP &amp; RATES</a>
-  </div>
+  /* FEATURED SAMPLE PACK CARD */
+  .release-box {
+    background: linear-gradient(135deg, #292d32 0%, #1c1e21 100%);
+    border: 2px solid #c99228;
+    border-radius: 5px;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  }
 
-  <div class="win-body">
-    <!-- HEADER -->
-    <div class="header-box">
-      <h1>ANGLE OF THE SHIFT</h1>
-      <div class="header-sub">VINTAGE ANALOG HARDWARE // CUSTOM C++ DSP // SAMPLE ARCHIVE</div>
-    </div>
+  .cassette-art {
+    background: #141517;
+    border: 2px solid #454a50;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: inset 0 0 10px #000;
+  }
 
-    <!-- FEATURED SAMPLE PACK (NORTON COMMANDER STYLE) -->
-    <div class="nc-panel" id="release">
-      <div class="nc-header">
-        <span>C:\RELEASES\AOTS-001\EPOIMI_PACK</span>
-        <span>24-BIT / 48KHZ WAV</span>
-      </div>
-      <div class="nc-title">EPOIMI — Raw Vintage Drum One-Shots (13 WAVs)</div>
-      <div class="nc-text">
-        Rare vintage <strong>"Epoimi"</strong> acoustic drum kit fitted with both dead-stock vintage drumheads and modern skins. Recorded with vintage dynamic microphones through a discrete analog mixing console and driven hot into a Perestroika-era VHS deck used as a physical magnetic limiter.
-      </div>
-      <div class="nc-meta">
-        CONTENTS: 13 Punchy One-Shots (Kicks, Snares, Toms, Percussion) + README_EPOIMI_PACK.txt | 100% Royalty-Free
-      </div>
-      <div>
-        <a href="https://paypal.com" id="paypal-btn" class="win-btn" target="_blank" rel="noopener">
-          &gt;&gt; BUY EPOIMI PACK VIA PAYPAL ($7+ NAME YOUR PRICE) &lt;&lt;
-        </a>
-      </div>
-    </div>
+  .release-info h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
 
-    <!-- A/B AUDIO MONITOR -->
-    <div class="win-group" id="player">
-      <div class="win-group-title">02 // A/B Analog Signal &amp; Tape Limiter Monitor</div>
-      <div class="player-screen">
-        <div class="player-row">
-          <span>FILE: 01_EPOIMI_DRUM_LOOP.WAV</span>
-          <span id="mode-label" style="color:#ffff55;">MODE: ANALOG CHAIN (WET)</span>
-        </div>
-        <div class="vu-meter" id="vu-display">LEVEL: [--------------------] 0 dB</div>
-      </div>
+  .release-tag {
+    display: inline-block;
+    background: var(--vfd-amber);
+    color: #111;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
 
-      <div class="player-controls">
-        <button class="win-btn" id="btn-play" onclick="togglePlay()">&#9654; PLAY DEMO</button>
-        <button class="win-btn" onclick="stopAudio()">&#9632; STOP</button>
-        <button class="win-btn" id="btn-dry" onclick="setMode('DRY')">BYPASS (DRY)</button>
-        <button class="win-btn active" id="btn-wet" onclick="setMode('WET')">ANALOG CHAIN (WET)</button>
-      </div>
+  .buy-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed #454a50;
+  }
 
-      <div class="ascii-box">[EPOIMI DRUMS] ---&gt; [DYNAMIC MICS] ---&gt; [DISCRETE CONSOLE] ---&gt; [VHS DECK LIMITER] ---&gt; [24-BIT MASTER]</div>
-    </div>
-
-    <!-- HARDWARE & DSP (DUAL NC PANELS) -->
-    <div class="nc-grid" id="rig">
-      <div class="nc-box">
-        <div class="nc-box-head">C:\HARDWARE\ANALOG_CHAIN</div>
-        <ul class="nc-list">
-          <li><strong>Perestroika-Era VHS Limiter:</strong> Steel-plant barter-era video deck driven into magnetic saturation as a physical drum limiter.</li>
-
-
-
-
-
+  .price-tag {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
